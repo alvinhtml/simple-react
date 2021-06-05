@@ -1,0 +1,23 @@
+{
+  "name": "simple-react",
+  "version": "1.0.0",
+  "description": "simple react",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "parcel serve ./src/index.html",
+    "build": "parcel build ./src/index.html"
+  },
+  "keywords": [
+    "simple",
+    "react"
+  ],
+  "author": "alvinhtml@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/plugin-syntax-jsx": "^7.12.13",
+    "@babel/plugin-transform-react-jsx": "^7.14.3",
+    "@babel/preset-env": "^7.14.2",
+    "parcel": "^2.0.0-beta.3.1"
+  }
+}
