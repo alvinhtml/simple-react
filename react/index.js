@@ -3,20 +3,11 @@ const React = {
 }
 
 function createElement(tag, attrs, ...children) {
-  const element = document.createElement(tag)
-
-  // 设置属性
-  setAttrs(element, attrs)
-
-  // 追加子节点
-  children.forEach((child) => {
-    if (typeof child === 'string') {
-        element.innerText = child
-    } else {
-      element.appendChild(child)
-    }
-  });
-  return element
+  return {
+    tag,
+    attrs,
+    children
+  }
 }
 
 function setAttrs(element, attrs) {
