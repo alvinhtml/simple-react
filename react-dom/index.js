@@ -19,25 +19,57 @@ function createComponent(comp, props) {
       return this.constructor(props)
     }
   }
-  console.log("inst", inst);
   return inst
 }
 
-function renderComponent(comp) {
-  console.log("renderComponent comp", comp);
+export function renderComponent(comp) {
   const vnode = comp.render()
   const base = _render(vnode)
-  console.log("base", base);
+
+  if (comp.base && comp.componentWillUpdate) {
+    comp.componentWillUpdate()
+  }
+
+  if (comp.base) {
+    if (comp.componentDidUpdate) {
+      comp.componentDidUpdate()
+    }
+  } else {
+    if (comp.componentDidMount) {
+      comp.componentDidMount()
+    }
+  }
+
+  // 节点替换
+  if (comp.base && comp.base.parentNode) {
+    comp.base.parentNode.replaceChild(base, comp.base)
+  }
+
   comp.base = base
 }
 
 function setComponentProps(comp, props) {
+  if (!comp.base) {
+    if (comp.componentWillMount) {
+      comp.componentWillMount()
+    }
+  } else {
+    if (comp.componentWillReceiveProps) {
+      comp.componentWillReceiveProps()
+    }
+  }
+
   // 设置属性
   comp.props = props
   renderComponent(comp)
 }
 
 function _render(vnode) {
+
+  // 如果 vnode 是数字
+  if (typeof vnode === 'number') {
+    vnode = String(vnode)
+  }
 
   // 如果 vnode 是字符串
   if (typeof vnode === 'string') {
@@ -51,8 +83,6 @@ function _render(vnode) {
     // 1. 创建组件
     const comp = createComponent(tag, attrs)
 
-    console.log("comp", comp);
-    console.log("tag", tag);
     // 2. 设置组件的属性
     setComponentProps(comp, attrs)
     // 3. 组件渲染的节点对象返回
