@@ -1,14 +1,15 @@
 import Component from '../react/component'
+import {diff, diffNode} from './diff'
 
 const ReactDOM = {
   render
 }
 
-function render(vnode, container) {
-  return container.appendChild(_render(vnode))
+function render(vnode, container, dom) {
+  return diff(dom, vnode, container)
 }
 
-function createComponent(comp, props) {
+export function createComponent(comp, props) {
   let inst
   if (comp.prototype && comp.prototype.render) {
     inst = new comp(props)
@@ -23,8 +24,11 @@ function createComponent(comp, props) {
 }
 
 export function renderComponent(comp) {
+  let base
   const vnode = comp.render()
-  const base = _render(vnode)
+
+  // base = _render(vnode)
+  base = diffNode(comp.base, vnode)
 
   if (comp.base && comp.componentWillUpdate) {
     comp.componentWillUpdate()
@@ -41,14 +45,14 @@ export function renderComponent(comp) {
   }
 
   // 节点替换
-  if (comp.base && comp.base.parentNode) {
-    comp.base.parentNode.replaceChild(base, comp.base)
-  }
+  // if (comp.base && comp.base.parentNode) {
+  //   comp.base.parentNode.replaceChild(base, comp.base)
+  // }
 
   comp.base = base
 }
 
-function setComponentProps(comp, props) {
+export function setComponentProps(comp, props) {
   if (!comp.base) {
     if (comp.componentWillMount) {
       comp.componentWillMount()
@@ -107,7 +111,7 @@ function _render(vnode) {
 }
 
 
-function setAttribute(dom, key, value) {
+export function setAttribute(dom, key, value) {
   if (key === 'className') {
     key = 'class'
   }
