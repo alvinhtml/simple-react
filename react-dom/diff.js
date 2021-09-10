@@ -1,18 +1,17 @@
 import {setAttribute, setComponentProps, createComponent} from './index'
 
 export function diff(dom, vnode, container) {
-  const ret = diffNode(dom, vnode)
-  console.log("ret", ret);
-  console.log("dom, vnode, container", dom, vnode, container);
+  const result = diffNode(dom, vnode)
+
   if (container) {
-    container.appendChild(ret)
+    container.appendChild(result)
   }
 
-  return ret
+  return result
 }
 
 export function diffNode(dom, vnode) {
-  let out = dom
+  let output = dom
 
   // 如果 vnode 是数字
   if (typeof vnode === 'number') {
@@ -27,38 +26,36 @@ export function diffNode(dom, vnode) {
         dom.textContent = vnode
       }
     } else {
-      out = document.createTextNode(vnode)
+      output = document.createTextNode(vnode)
 
       if (dom && dom.parentNode) {
-        dom.parentNode.replaceNode(out, dom)
+        dom.parentNode.replaceNode(output, dom)
       }
     }
-    console.log("out vnode", out, vnode);
-    return out
+    return output
   }
 
   if (typeof vnode.tag === 'function') {
-    out = diffComponent(out, vnode)
-    console.log("out vnode diffComponent", out, vnode);
-    return out
+    output = diffComponent(output, vnode)
+    return output
   }
 
   // 非文本 DOM 节点
   if (!dom) {
-    out = document.createElement(vnode.tag)
+    output = document.createElement(vnode.tag)
   }
 
   // 比较子节点（dom节点和组件）
-  if (vnode.children && vnode.children.length > 0 || (out.childNodes.length > 0)) {
-    diffChildren(out, vnode.children)
+  if (vnode.children && vnode.children.length > 0 || (output.childNodes.length > 0)) {
+    diffChildren(output, vnode.children)
   }
 
-  diffAttribute(out, vnode)
-  console.log("out", out);
-  return out
+  diffAttribute(output, vnode)
+  return output
 }
 
 function diffComponent(dom, vnode) {
+  console.log("diffComponent:: dom, vnode", dom, vnode);
   let comp = dom
   // 如果组件没有变化， 重新设置 props
   if (comp && comp.constructor === vnode.tag) {

@@ -56,7 +56,7 @@ class Main extends React.Component {
   render() {
     return (
       <div title="hello" style={{color: '#9adfc1'}}>
-        Hello React <span>{this.state.num}</span> <button onClick={this.handleClick.bind(this)}>摸我</button>
+        Hello React <span>{this.state.num}</span> <button onClick={this.handleClick.bind(this)}>点击</button>
       </div>
     )
   }

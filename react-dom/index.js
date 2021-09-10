@@ -1,12 +1,15 @@
 import Component from '../react/component'
-import {diff, diffNode} from './diff'
+import {
+  diff,
+  diffNode
+} from './diff'
 
 const ReactDOM = {
   render
 }
 
 function render(vnode, container, dom) {
-  return diff(dom, vnode, container)
+  diff(dom, vnode, container)
 }
 
 export function createComponent(comp, props) {
@@ -24,10 +27,11 @@ export function createComponent(comp, props) {
 }
 
 export function renderComponent(comp) {
+
+  console.error("comp", comp);
   let base
   const vnode = comp.render()
 
-  // base = _render(vnode)
   base = diffNode(comp.base, vnode)
 
   if (comp.base && comp.componentWillUpdate) {
@@ -80,7 +84,10 @@ function _render(vnode) {
     return document.createTextNode(vnode)
   }
 
-  const {tag, attrs} = vnode
+  const {
+    tag,
+    attrs
+  } = vnode
 
   // 如果 tag 是函数
   if (typeof tag === 'function') {
@@ -120,11 +127,11 @@ export function setAttribute(dom, key, value) {
     key = key.toLowerCase()
     dom[key] = value || ''
   } else {
-    if (key === 'style'){
+    if (key === 'style') {
       if (!value || typeof value === 'string') {
         dom.style.cssText = value || ''
       } else {
-        for(let k in value) {
+        for (let k in value) {
           dom.style[k] = typeof value[k] === 'number' ? value[k] + 'px' : value[k]
         }
       }
